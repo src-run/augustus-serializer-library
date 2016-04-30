@@ -50,6 +50,42 @@ interface SerializerInterface
         self::TYPE_PHP,
         self::TYPE_JSON,
     ];
+
+    /**
+     * @param string $type
+     *
+     * @return SerializerInterface
+     */
+    public static function create($type = self::TYPE_AUTO);
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    public function serialize($data);
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    public function unserialize($data);
+
+    /**
+     * @param null|\Closure $denormalizer
+     */
+    public function setDenormalizer(\Closure $denormalizer = null);
+
+    /**
+     * @param null|\Closure $normalizer
+     */
+    public function setNormalizer(\Closure $normalizer = null);
+
+    /**
+     * @return SerializerTypeInterface
+     */
+    public function getSerializer();
 }
 
 /* EOF */

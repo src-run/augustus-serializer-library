@@ -90,6 +90,9 @@ class Serializer implements SerializerInterface
         return $this;
     }
 
+    /**
+     * @return SerializerTypeInterface
+     */
     final public function getSerializer()
     {
         return static::$serializer;

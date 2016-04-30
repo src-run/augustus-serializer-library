@@ -135,6 +135,24 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($denormalizer(json_decode(json_encode($normalizer($dataOriginal)))), $dataUnserialized);
     }
+
+    public function testSupported()
+    {
+        $serializer = Serializer::create(Serializer::TYPE_IGBINARY)->getSerializer();
+        $this->assertTrue(
+            $serializer::supported()
+        );
+
+        $serializer = Serializer::create(Serializer::TYPE_JSON)->getSerializer();
+        $this->assertTrue(
+            $serializer::supported()
+        );
+
+        $serializer = Serializer::create(Serializer::TYPE_PHP)->getSerializer();
+        $this->assertTrue(
+            $serializer::supported()
+        );
+    }
 }
 
 /* EOF */

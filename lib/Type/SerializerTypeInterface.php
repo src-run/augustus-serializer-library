@@ -18,6 +18,11 @@ namespace SR\Serializer\Type;
 interface SerializerTypeInterface
 {
     /**
+     * @return SerializerTypeInterface
+     */
+    public static function create();
+
+    /**
      * @param mixed|null    $data
      * @param \Closure|null $visitor
      *
@@ -32,6 +37,11 @@ interface SerializerTypeInterface
      * @return mixed
      */
     public function unserialize($data = null, \Closure $visitor = null);
+
+    /**
+     * @return bool
+     */
+    public static function supported();
 }
 
 /* EOF */
