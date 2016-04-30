@@ -10,20 +10,25 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer;
+namespace SR\Serializer\Type;
 
 /**
- * Class SerializerNative.
+ * Class SerializerTypePhp.
  */
-class SerializerNative extends AbstractSerializer
+class SerializerTypePhp extends AbstractSerializerType
 {
-    /**
-     * SerializerNative constructor.
-     */
     public function __construct()
     {
         $this->serializationHandler = 'serialize';
         $this->unSerializationHandler = 'unserialize';
+    }
+
+    /**
+     * @return bool
+     */
+    public static function supported()
+    {
+        return true;
     }
 }
 

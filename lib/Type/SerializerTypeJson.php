@@ -10,20 +10,27 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer;
+namespace SR\Serializer\Type;
+
+use SR\Utility\EngineInspect;
 
 /**
- * Class SerializerJson.
+ * Class SerializerTypeJson.
  */
-class SerializerJson extends AbstractSerializer
+class SerializerTypeJson extends AbstractSerializerType
 {
-    /**
-     * SerializerJson constructor.
-     */
     public function __construct()
     {
         $this->serializationHandler = 'json_encode';
         $this->unSerializationHandler = 'json_decode';
+    }
+
+    /**
+     * @return bool
+     */
+    public static function supported()
+    {
+        return EngineInspect::extensionLoaded('json');
     }
 }
 

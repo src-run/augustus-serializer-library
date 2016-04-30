@@ -10,20 +10,27 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer;
+namespace SR\Serializer\Type;
+
+use SR\Utility\EngineInspect;
 
 /**
- * Class SerializerIgbinary.
+ * Class SerializerTypeIgbinary.
  */
-final class SerializerIgbinary extends AbstractSerializer
+final class SerializerTypeIgbinary extends AbstractSerializerType
 {
-    /**
-     * SerializerIgbinary constructor.
-     */
     public function __construct()
     {
         $this->serializationHandler = 'igbinary_serialize';
         $this->unSerializationHandler = 'igbinary_unserialize';
+    }
+
+    /**
+     * @return bool
+     */
+    public static function supported()
+    {
+        return EngineInspect::extensionLoaded('igbinary');
     }
 }
 

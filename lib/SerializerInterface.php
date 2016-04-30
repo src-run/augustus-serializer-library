@@ -18,20 +18,38 @@ namespace SR\Serializer;
 interface SerializerInterface
 {
     /**
-     * @param mixed|null    $data
-     * @param \Closure|null $visitor
-     *
-     * @return mixed
+     * @var int
      */
-    public function serializeData($data = null, \Closure $visitor = null);
+    const TYPE_AUTO = -1;
 
     /**
-     * @param mixed|null    $data
-     * @param \Closure|null $visitor
-     *
-     * @return mixed
+     * @var string
      */
-    public function unSerializeData($data = null, \Closure $visitor = null);
+    const TYPE_PHP = 'SR\Serializer\Type\SerializerTypePhp';
+
+    /**
+     * @var string
+     */
+    const TYPE_IGBINARY = 'SR\Serializer\Type\SerializerTypeIgbinary';
+
+    /**
+     * @var string
+     */
+    const TYPE_JSON = 'SR\Serializer\Type\SerializerTypeJson';
+
+    /**
+     * @var string
+     */
+    const TYPE_CALLABLE = 'SR\Serializer\Type\SerializerTypeCallable';
+
+    /**
+     * @var string[]
+     */
+    const PRIORITY = [
+        self::TYPE_IGBINARY,
+        self::TYPE_PHP,
+        self::TYPE_JSON,
+    ];
 }
 
 /* EOF */

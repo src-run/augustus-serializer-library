@@ -10,12 +10,12 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer;
+namespace SR\Serializer\Type;
 
 /**
- * Class AbstractSerializer.
+ * Class AbstractSerializerType.
  */
-class AbstractSerializer implements SerializerInterface
+abstract class AbstractSerializerType implements SerializerTypeInterface
 {
     /**
      * @var callable|\Closure
@@ -28,7 +28,7 @@ class AbstractSerializer implements SerializerInterface
     protected $unSerializationHandler;
 
     /**
-     * @return SerializerInterface
+     * @return SerializerTypeInterface
      */
     public static function create()
     {
@@ -41,7 +41,7 @@ class AbstractSerializer implements SerializerInterface
      *
      * @return mixed
      */
-    public function serializeData($data = null, \Closure $visitor = null)
+    public function serialize($data = null, \Closure $visitor = null)
     {
         if ($visitor instanceof \Closure) {
             $data = $visitor($data);
@@ -56,7 +56,7 @@ class AbstractSerializer implements SerializerInterface
      *
      * @return mixed
      */
-    public function unSerializeData($data = null, \Closure $visitor = null)
+    public function unserialize($data = null, \Closure $visitor = null)
     {
         $data = call_user_func($this->unSerializationHandler, $data);
 
