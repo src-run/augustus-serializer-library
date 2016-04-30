@@ -23,6 +23,11 @@ env :
 
 install :
   - bash .bldr/bldr -b up-env -V -V
+  - /home/travis/.phpenv/bin/phpenv config-add ./.bldr/_php-configuration/igbinary.ini
+  - /home/travis/.phpenv/bin/phpenv config-add $(pwd)/.bldr/_php-configuration/igbinary.ini
+  - /home/travis/.phpenv/bin/phpenv config-add ./.bldr/_php-configuration/timezone.ini
+  - /home/travis/.phpenv/bin/phpenv config-add $(pwd)/.bldr/_php-configuration/timezone.ini
+  - /home/travis/.phpenv/bin/phpenv commands
   - bash .bldr/bldr -b up-app -V -V
 
 script :
