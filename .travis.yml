@@ -22,19 +22,14 @@ env :
     secure : ZUzB7VhBBIGORmgDGKeVW2RLxQkSzYaXLIXYBerplikLmpnQCdiV16NcZTPZ8JVUJ9dTYWuVF0h2yoGmAgyrawWwmxo8g3Z/KdhzzMOl/1nyDZotROwNp89Iy7RpUpnFyKBV3/Hp2WZry+11QgqqBLLAHUd++ucaRr0mtBrSoD92oiQ3scbQyFkqkVDbseSm6sxYX87tw0r4GKC8DS7A9m7zlVky3KD7oPrnPfNvGq0MPsT3m9TCHIGrSuBLwQM9wCQOZ+CeayjjzJM8ByzCOSXEF9in9DI+Qgst+BgB2b6Tp1GmG3Se+I2u7eCGL+JOv0I934LFJXaXEIrJkH4xSNGcUcOALFng5NgDGNoa1gml1oqcb4YbO7DSGTlv7vmxpBF3DWOsh7ahad9PBeYqs1epQ3WoFsk6NyYAHshBAienbz+Vm6IoAUkT94b/KFHU8PZ0s1crYddbgtn9hPAVvfpI2LbtiEzjNmZwT8UBLRd79a/AYT9hKRD/XRxRdQHYUS+scSSVrR1P9sHm0vCO3wIqsBOa2WZXOtN28TN/jweAk7HRVgOrwQqnLp2ber+u0hTfoyX1wrUAW/jiiI/XzlhC/tAZifv8BgQbPpK3Pv/SlIOIOHNiuXDfdCTxJyY+R8SFCG12Tyi0Js7W7Am5VbqohUTKNzxNhGTkJJiR5dw=
 
 install :
-  - bash .bldr/bldr -b up-env -V -V
-  - /home/travis/.phpenv/bin/phpenv config-add ./.bldr/_php-configuration/igbinary.ini
-  - /home/travis/.phpenv/bin/phpenv config-add $(pwd)/.bldr/_php-configuration/igbinary.ini
-  - /home/travis/.phpenv/bin/phpenv config-add ./.bldr/_php-configuration/timezone.ini
-  - /home/travis/.phpenv/bin/phpenv config-add $(pwd)/.bldr/_php-configuration/timezone.ini
-  - /home/travis/.phpenv/bin/phpenv commands
-  - bash .bldr/bldr -b up-app -V -V
+  - bash .bldr/bldr -b up-env -q
+  - bash .bldr/bldr -b up-app -q
 
 script :
   - bin/phpunit -vvv
 
 after_script :
-  - bash .bldr/bldr -b down-app -V -V
-  - bash .bldr/bldr -b down-env -V -V
+  - bash .bldr/bldr -b down-app -q
+  - bash .bldr/bldr -b down-env -q
 
 ...
