@@ -9,21 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer\Type;
+namespace SR\Serializer\Tests\Fixture;
 
-class SerializerTypePhp extends AbstractSerializerType
+use SR\Serializer\Type\AbstractSerializerType;
+
+class SerializerTypeNotSupported extends AbstractSerializerType
 {
-    public function __construct()
-    {
-        $this->serializerHandler = 'serialize';
-        $this->unserializerHandler = 'unserialize';
-    }
-
     /**
      * @return bool
      */
     public static function supported() : bool
     {
-        return true;
+        return false;
     }
 }

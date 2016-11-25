@@ -1,52 +1,60 @@
 {
-  "name"        : "src-run/augustus-serializer-library",
-  "license"     : "MIT",
-  "type"        : "library",
-  "homepage"    : "https://src.run/augustus-serializer-library",
-  "description" : "simple abstraction on serialize functions with support for php- json- and igbinary-based serialization",
-  "support" : {
-    "email"  : "rmf@src.run",
-    "issues" : "https://src.run/augustus-serializer-library/issues",
-    "source" : "https://src.run/augustus-serializer-library/git"
+  "name": "src-run/augustus-serializer-library",
+  "license": "MIT",
+  "type": "library",
+  "homepage": "https://src.run/augustus-serializer-library",
+  "description": "Basic serialize implementations supporting for php, json, and igbinary serializer.",
+  "support": {
+    "email": "rmf@src.run",
+    "issues": "https://src.run/augustus-serializer-library/issues",
+    "source": "https://src.run/augustus-serializer-library/git"
   },
-  "keywords" : [
+  "keywords": [
     "augustus-serializer-library", "augustus", "serializer", "library", "rmf", "src-run"
   ],
-  "authors" : [
+  "authors": [
     {
-      "name"    : "Rob Frawley 2nd",
-      "email"   : "rmf@src.run",
+      "name": "Rob Frawley 2nd",
+      "email": "rmf@src.run",
       "homepage": "https://src.run/rmf",
-      "role"    : "Project Lead"
+      "role": "Project Lead"
     }
   ],
-  "require" : {
-    "php"                                : "^5.6||^7.0",
-    "src-run/augustus-exception-library" : "^0.6"
+  "require": {
+    "php": "~7.0",
+    "src-run/augustus-utility-library": "~0.7"
   },
-  "require-dev" : {
-    "phpunit/phpunit"        : "^5.0",
-    "codacy/coverage"        : "^1.0",
-    "satooshi/php-coveralls" : "^1.0"
+  "require-dev": {
+    "codacy/coverage": "~1.0",
+    "ext-igbinary": "*",
+    "friendsofphp/php-cs-fixer": "v2.0.0-alpha",
+    "phpunit/phpunit": "~5.4",
+    "satooshi/php-coveralls": "~1.0",
+    "sllh/php-cs-fixer-styleci-bridge": "~2.1",
+    "symfony/phpunit-bridge": "~3.0"
   },
-  "autoload" : {
-    "psr-4" : {
-      "SR\\Serializer\\" : "lib/"
+  "suggest": {
+    "ext-igbinary": "Require to use igbinary serializer implementation."
+  },
+  "autoload": {
+    "psr-4": {
+      "SR\\Serializer\\": "lib/"
     }
   },
-  "autoload-dev" : {
-    "psr-4" : {
-      "SR\\Serializer\\Tests\\" : "tests/"
+  "autoload-dev": {
+    "psr-4": {
+      "SR\\Serializer\\Tests\\": "tests/"
     }
   },
-  "minimum-stability" : "dev",
-  "prefer-stable"     : true,
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "config": {
-    "bin-dir" : "bin"
+    "bin-dir": "bin",
+    "sort-packages": true
   },
   "extra": {
     "branch-alias": {
-      "dev-master" : "0.6-dev"
+      "dev-master": "0.7-dev"
     }
   }
 }

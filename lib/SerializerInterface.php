@@ -1,10 +1,9 @@
 <?php
 
 /*
- * This file is part of the `src-run/arthur-doctrine-serializer-library` project.
+ * This file is part of the `src-run/augustus-serializer-library` project.
  *
  * (c) Rob Frawley 2nd <rmf@src.run>
- * (c) Scribe Inc      <scr@src.run>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -12,58 +11,50 @@
 
 namespace SR\Serializer;
 
-/**
- * Interface SerializerInterface.
- */
+use SR\Serializer\Type\SerializerTypeIgbinary;
+use SR\Serializer\Type\SerializerTypeInterface;
+use SR\Serializer\Type\SerializerTypeJson;
+use SR\Serializer\Type\SerializerTypePhp;
+
 interface SerializerInterface
 {
     /**
-     * @var int
+     * @var string
      */
-    const TYPE_AUTO = -1;
+    const TYPE_PHP = SerializerTypePhp::class;
 
     /**
      * @var string
      */
-    const TYPE_PHP = 'SR\Serializer\Type\SerializerTypePhp';
+    const TYPE_IGBINARY = SerializerTypeIgbinary::class;
 
     /**
      * @var string
      */
-    const TYPE_IGBINARY = 'SR\Serializer\Type\SerializerTypeIgbinary';
-
-    /**
-     * @var string
-     */
-    const TYPE_JSON = 'SR\Serializer\Type\SerializerTypeJson';
-
-    /**
-     * @var string
-     */
-    const TYPE_CALLABLE = 'SR\Serializer\Type\SerializerTypeCallable';
+    const TYPE_JSON = SerializerTypeJson::class;
 
     /**
      * @var string[]
      */
-    const PRIORITY = [
+    const TYPE_PRIORITY = [
         self::TYPE_IGBINARY,
         self::TYPE_PHP,
         self::TYPE_JSON,
     ];
 
     /**
-     * @param string $type
+     * @param string|int $type
      *
      * @return SerializerInterface
      */
-    public static function create($type = self::TYPE_AUTO);
+    public static function create(string $type = null) : SerializerInterface;
 
     /**
      * @param mixed $data
      *
      * @return mixed
      */
-    public function serialize($data);
+    public function serialize($data) : string;
 
     /**
      * @param mixed $data
@@ -75,17 +66,15 @@ interface SerializerInterface
     /**
      * @param null|\Closure $denormalizer
      */
-    public function setDenormalizer(\Closure $denormalizer = null);
+    public function setDenormalizer(\Closure $denormalizer = null) : SerializerInterface;
 
     /**
      * @param null|\Closure $normalizer
      */
-    public function setNormalizer(\Closure $normalizer = null);
+    public function setNormalizer(\Closure $normalizer = null) : SerializerInterface;
 
     /**
      * @return SerializerTypeInterface
      */
-    public function getSerializer();
+    public function getSerializer() : SerializerTypeInterface;
 }
-
-/* EOF */

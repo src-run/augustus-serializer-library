@@ -1,10 +1,9 @@
 <?php
 
 /*
- * This file is part of the `src-run/arthur-doctrine-serializer-library` project.
+ * This file is part of the `src-run/augustus-serializer-library` project.
  *
  * (c) Rob Frawley 2nd <rmf@src.run>
- * (c) Scribe Inc      <scr@src.run>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -12,25 +11,22 @@
 
 namespace SR\Serializer\Type;
 
-/**
- * Class AbstractSerializerType.
- */
 abstract class AbstractSerializerType implements SerializerTypeInterface
 {
     /**
      * @var callable|\Closure
      */
-    protected $serializationHandler;
+    protected $serializerHandler;
 
     /**
      * @var callable|\Closure
      */
-    protected $unSerializationHandler;
+    protected $unserializerHandler;
 
     /**
      * @return SerializerTypeInterface
      */
-    public static function create()
+    public static function create() : SerializerTypeInterface
     {
         return new static();
     }
@@ -41,13 +37,13 @@ abstract class AbstractSerializerType implements SerializerTypeInterface
      *
      * @return mixed
      */
-    public function serialize($data = null, \Closure $visitor = null)
+    public function serialize($data = null, \Closure $visitor = null) : string
     {
         if ($visitor instanceof \Closure) {
             $data = $visitor($data);
         }
 
-        return call_user_func($this->serializationHandler, $data);
+        return call_user_func($this->serializerHandler, $data);
     }
 
     /**
@@ -58,10 +54,8 @@ abstract class AbstractSerializerType implements SerializerTypeInterface
      */
     public function unserialize($data = null, \Closure $visitor = null)
     {
-        $data = call_user_func($this->unSerializationHandler, $data);
+        $data = call_user_func($this->unserializerHandler, $data);
 
         return $visitor instanceof \Closure ? $visitor($data) : $data;
     }
 }
-
-/* EOF */

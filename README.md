@@ -1,9 +1,9 @@
 
 # [src-run] augustus-serializer-library
 
-|       Travis-CI        |      Codacy Rating      |      Code Coverage      |        Style-CI         |
-|:----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
-| [![Travis](https://src.run/augustus-serializer-library/travis.svg)](https://src.run/augustus-serializer-library/travis) | [![Codacy](https://src.run/augustus-serializer-library/codacy.svg)](https://src.run/augustus-serializer-library/codacy) | [![Coveralls](https://src.run/augustus-serializer-library/coveralls.svg)](https://src.run/augustus-serializer-library/coveralls) | [![Coveralls](https://src.run/augustus-serializer-library/styleci.svg)](https://src.run/augustus-serializer-library/styleci) |
+|       Travis-CI        |      Codacy Rating      |      Code Coverage      |        Style-CI         |         Release         |    API Documentation    |
+|:----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
+| [![Travis](https://src.run/augustus-serializer-library/travis.svg)](https://src.run/augustus-serializer-library/travis) | [![Codacy](https://src.run/augustus-serializer-library/codacy.svg)](https://src.run/augustus-serializer-library/codacy) | [![Coveralls](https://src.run/augustus-serializer-library/coveralls.svg)](https://src.run/augustus-serializer-library/coveralls) | [![Coveralls](https://src.run/augustus-serializer-library/styleci.svg)](https://src.run/augustus-serializer-library/styleci) | [![Packagist](https://src.run/augustus-serializer-library/packagist.svg)](https://src.run/augustus-serializer-library/packagist) | [![API Docs](https://src.run/augustus-serializer-library/api.svg)](https://src.run/augustus-serializer-library/api) | 
 
 
 ## Overview
@@ -11,7 +11,7 @@
 [Welcome](https://src.run/go/readme_welcome)!
 The `src-run/augustus-serializer-library` package provides the following
 
-> simple abstraction on serialize functions with support for php- json- and igbinary-based serialization
+> A simple library to facilitate dumping of files to native php.
 
 ### Grouping
 
@@ -116,5 +116,4 @@ information.
 | __Stable Release__ | [![Packagist](https://src.run/augustus-serializer-library/packagist.svg)](https://src.run/augustus-serializer-library/packagist)     |
 | __Dev Release__    | [![Packagist](https://src.run/augustus-serializer-library/packagist_pre.svg)](https://src.run/augustus-serializer-library/packagist) |
 | __License__        | [![License](https://src.run/augustus-serializer-library/license.svg)](https://src.run/augustus-serializer-library/license)           |
-| __Reference__      | [![License](https://src.run/augustus-serializer-library/api.svg)](https://src.run/augustus-serializer-library/api)                   |
 

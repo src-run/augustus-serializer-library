@@ -1,10 +1,9 @@
 <?php
 
 /*
- * This file is part of the `src-run/arthur-doctrine-serializer-library` project.
+ * This file is part of the `src-run/augustus-serializer-library` project.
  *
  * (c) Rob Frawley 2nd <rmf@src.run>
- * (c) Scribe Inc      <scr@src.run>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -13,10 +12,8 @@
 namespace SR\Serializer\Tests;
 
 use SR\Serializer\Serializer;
+use SR\Serializer\Tests\Fixture\SerializerTypeNotSupported;
 
-/**
- * Class SerializerFactoryTest.
- */
 class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateTypes()
@@ -42,7 +39,7 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
         if (extension_loaded('igbinary')) {
             $this->assertInstanceOf(
                 'SR\Serializer\Type\SerializerTypeIgbinary',
-                Serializer::create(Serializer::TYPE_AUTO)->getSerializer()
+                Serializer::create()->getSerializer()
             );
         }
     }
@@ -152,6 +149,11 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $serializer::supported()
         );
+    }
+
+    public function testNotSupported()
+    {
+        $serializer = Serializer::create(SerializerTypeNotSupported::class);
     }
 }
 
