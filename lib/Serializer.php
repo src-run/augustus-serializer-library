@@ -12,6 +12,7 @@
 namespace SR\Serializer;
 
 use SR\Serializer\Type\SerializerTypeInterface;
+use SR\Serializer\Type\SerializerTypePhp;
 
 class Serializer implements SerializerInterface
 {
@@ -107,9 +108,9 @@ class Serializer implements SerializerInterface
     /**
      * @return bool
      */
-    final public function hasSerializer() : bool
+    final public function hasDefaultSerializer() : bool
     {
-        return static::$serializer instanceof SerializerTypeInterface;
+        return static::$serializer instanceof SerializerTypePhp && static::$serializer->supported();
     }
 
     /**

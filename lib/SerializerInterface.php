@@ -81,5 +81,5 @@ interface SerializerInterface
     /**
      * @return bool
      */
-    public function hasSerializer() : bool;
+    public function hasDefaultSerializer() : bool;
 }
