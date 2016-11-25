@@ -12,6 +12,7 @@
 namespace SR\Serializer\Tests;
 
 use SR\Serializer\Serializer;
+use SR\Serializer\SerializerInterface;
 use SR\Serializer\Tests\Fixture\SerializerTypeNotSupported;
 
 class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
@@ -154,6 +155,8 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testNotSupported()
     {
         $serializer = Serializer::create(SerializerTypeNotSupported::class);
+
+        $this->assertInstanceOf(SerializerInterface::class, $serializer);
     }
 }
 
