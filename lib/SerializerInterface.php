@@ -77,4 +77,9 @@ interface SerializerInterface
      * @return SerializerTypeInterface
      */
     public function getSerializer() : SerializerTypeInterface;
+
+    /**
+     * @return bool
+     */
+    public function hasSerializer() : bool;
 }

@@ -105,6 +105,14 @@ class Serializer implements SerializerInterface
     }
 
     /**
+     * @return bool
+     */
+    final public function hasSerializer() : bool
+    {
+        return static::$serializer instanceof SerializerTypeInterface;
+    }
+
+    /**
      * @param string $type
      *
      * @return bool

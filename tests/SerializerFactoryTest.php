@@ -157,6 +157,7 @@ class SerializerFactoryTest extends \PHPUnit_Framework_TestCase
         $serializer = Serializer::create(SerializerTypeNotSupported::class);
 
         $this->assertInstanceOf(SerializerInterface::class, $serializer);
+        $this->assertFalse($serializer->hasSerializer());
     }
 }
 
