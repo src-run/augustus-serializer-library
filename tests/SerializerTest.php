@@ -70,7 +70,7 @@ class SerializerTest extends TestCase
      */
     public static function provideDefaultSerializationData(): \Iterator
     {
-        foreach (self::provideSerializationData() as list($data)) {
+        foreach (self::provideSerializationData() as [$data]) {
             yield [$data, (function ($data): string {
                 return EngineQuery::extensionLoaded('igbinary') ? igbinary_serialize($data) : serialize($data);
             })($data)];
@@ -97,17 +97,17 @@ class SerializerTest extends TestCase
      */
     public static function provideSpecifiedHandlerSerializationData(): \Iterator
     {
-        foreach (self::provideHandlerData() as list($handler)) {
+        foreach (self::provideHandlerData() as [$handler]) {
             $dataSet = array_filter(iterator_to_array(self::provideSerializationData()), function ($data) use ($handler) {
                 return JsonHandler::class === $handler && !is_object($data[0]);
             });
-            foreach ($dataSet as list($data)) {
+            foreach ($dataSet as [$data]) {
                 yield [$handler, $data, (function ($data, string $handler) {
                     switch ($handler) {
                         case JsonHandler::class:
                             return json_encode($data);
 
-                        case PhpHandler::class;
+                        case PhpHandler::class:
                             return serialize($data);
 
                         case IgbinaryHandler::class:
@@ -147,7 +147,7 @@ class SerializerTest extends TestCase
     public function testSerializationWithRuntimeVisitors($provided): void
     {
         $serializerNoVisitors = new Serializer();
-        $serializer =  new Serializer();
+        $serializer = new Serializer();
 
         $this->assertCount(0, $serializer->getSerializeVisitors());
         $this->assertCount(0, $serializer->getUnSerializeVisitors());

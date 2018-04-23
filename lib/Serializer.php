@@ -181,7 +181,7 @@ final class Serializer implements SerializerInterface
     }
 
     /**
-     * @param string $className
+     * @param string  $className
      * @param mixed[] $constructorArguments
      *
      * @return HandlerInterface|object
