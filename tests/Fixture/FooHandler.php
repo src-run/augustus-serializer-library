@@ -11,14 +11,22 @@
 
 namespace SR\Serializer\Tests\Fixture;
 
-use SR\Serializer\Type\AbstractSerializerType;
+use SR\Serializer\Handler\ClosureHandler;
 
-class SerializerTypeNotSupported extends AbstractSerializerType
+class FooHandler extends ClosureHandler
 {
+    public function __construct()
+    {
+        parent::__construct(
+            function ($data) { return $data; },
+            function ($data) { return $data; }
+        );
+    }
+
     /**
      * @return bool
      */
-    public static function supported() : bool
+    public static function isSupported() : bool
     {
         return false;
     }

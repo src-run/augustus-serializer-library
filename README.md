@@ -11,7 +11,7 @@
 [Welcome](https://src.run/go/readme_welcome)!
 The `src-run/augustus-serializer-library` package provides the following
 
-> A simple library to facilitate dumping of files to native php.
+> A simple serialization abstraction with support for php- json- and igbinary-based serialization.
 
 ### Grouping
 

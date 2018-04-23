@@ -11,131 +11,216 @@
 
 namespace SR\Serializer;
 
-use SR\Serializer\Type\SerializerTypeInterface;
-use SR\Serializer\Type\SerializerTypePhp;
+use SR\Serializer\Handler\HandlerInterface;
+use SR\Serializer\Handler\IgbinaryHandler;
+use SR\Serializer\Handler\JsonHandler;
+use SR\Serializer\Handler\PhpHandler;
+use SR\Serializer\Visitor\VisitorInterface;
 
-class Serializer implements SerializerInterface
+final class Serializer implements SerializerInterface
 {
     /**
-     * @var SerializerTypeInterface
+     * @var string[]
      */
-    private static $serializer;
+    private const AVAILABLE_HANDLERS = [
+        IgbinaryHandler::class,
+        PhpHandler::class,
+        JsonHandler::class,
+    ];
 
     /**
-     * @var null|\Closure
+     * @var null|HandlerInterface
      */
-    private static $normalizer;
+    private $handler;
 
     /**
-     * @var null|\Closure
+     * @var VisitorInterface[]
      */
-    private static $denormalizer;
+    private $doVisitors = [];
 
     /**
-     * @param string|int $type
+     * @var VisitorInterface[]
+     */
+    private $unVisitors = [];
+
+    /**
+     * @param string|null $handlerName
+     * @param mixed       ...$handlerArguments
+     */
+    public function __construct(string $handlerName = null, ...$handlerArguments)
+    {
+        $this->handler = $this->setupHandler($handlerName, $handlerArguments);
+    }
+
+    /**
+     * @param string|null $handlerName
+     * @param mixed       ...$handlerArguments
      *
      * @return SerializerInterface
      */
-    final public static function create(string $type = null) : SerializerInterface
+    public static function create(string $handlerName = null, ...$handlerArguments): SerializerInterface
     {
-        $serializers = static::TYPE_PRIORITY;
+        return new self($handlerName, ...$handlerArguments);
+    }
 
-        if ($type !== null) {
-            $serializers = [$type];
-        }
+    /**
+     * @return HandlerInterface
+     */
+    public function getHandler(): HandlerInterface
+    {
+        return $this->handler;
+    }
 
-        foreach ($serializers as $type) {
-            if (static::createSerializer($type)) {
-                break;
+    /**
+     * @return VisitorInterface[]
+     */
+    public function getSerializeVisitors(): array
+    {
+        return $this->doVisitors;
+    }
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return SerializerInterface
+     */
+    public function registerSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
+    {
+        $this->doVisitors = array_merge($this->doVisitors, self::filterVisitors($visitors, $this->doVisitors));
+
+        return $this;
+    }
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return SerializerInterface
+     */
+    public function removeSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
+    {
+        $this->doVisitors = self::filterVisitors($this->doVisitors, $visitors ?: $this->doVisitors);
+
+        return $this;
+    }
+
+    /**
+     * @return VisitorInterface[]
+     */
+    public function getUnSerializeVisitors(): array
+    {
+        return $this->unVisitors;
+    }
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return SerializerInterface
+     */
+    public function registerUnSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
+    {
+        $this->unVisitors = array_merge($this->unVisitors, self::filterVisitors($visitors, $this->unVisitors));
+
+        return $this;
+    }
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return SerializerInterface
+     */
+    public function removeUnSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
+    {
+        $this->unVisitors = self::filterVisitors($this->unVisitors, $visitors ?: $this->unVisitors);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed            $data
+     * @param VisitorInterface ...$runtimeVisitors
+     *
+     * @return string
+     */
+    public function serialize($data, VisitorInterface ...$runtimeVisitors): string
+    {
+        return $this->getHandler()->doSerialization($data, ...array_merge($this->doVisitors, $runtimeVisitors));
+    }
+
+    /**
+     * @param string           $data
+     * @param VisitorInterface ...$runtimeVisitors
+     *
+     * @return mixed
+     */
+    public function unSerialize(string $data, VisitorInterface ...$runtimeVisitors)
+    {
+        return $this->getHandler()->unSerialization($data, ...array_merge($this->unVisitors, $runtimeVisitors));
+    }
+
+    /**
+     * @param string|null $name
+     * @param array       $arguments
+     *
+     * @return null|HandlerInterface
+     */
+    private function setupHandler(string $name = null, array $arguments = []): ?HandlerInterface
+    {
+        $exceptions = [];
+
+        foreach (null !== $name ? [$name] : self::AVAILABLE_HANDLERS as $handler) {
+            try {
+                return self::createHandler($handler, $arguments);
+            } catch (\Exception $exception) {
+                $exceptions[] = $exception;
             }
         }
 
-        return new static();
+        throw new \InvalidArgumentException(sprintf('Failed to setup handlers: %s', implode(', ', array_map(function (\Exception $exception): string {
+            return sprintf('"%s"', $exception->getMessage());
+        }, $exceptions))), 0, array_shift($exceptions));
     }
 
     /**
-     * @param mixed $data
+     * @param string $className
+     * @param mixed[] $constructorArguments
      *
-     * @return mixed
+     * @return HandlerInterface|object
      */
-    final public function serialize($data) : string
+    private static function createHandler(string $className, array $constructorArguments): HandlerInterface
     {
-        return $this->getSerializer()->serialize($data, static::$normalizer);
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return mixed
-     */
-    final public function unserialize($data)
-    {
-        return $this->getSerializer()->unserialize($data, static::$denormalizer);
-    }
-
-    /**
-     * @param null|\Closure $denormalizer
-     *
-     * @return $this
-     */
-    final public function setDenormalizer(\Closure $denormalizer = null) : SerializerInterface
-    {
-        static::$denormalizer = $denormalizer;
-
-        return $this;
-    }
-
-    /**
-     * @param null|\Closure $normalizer
-     *
-     * @return $this
-     */
-    final public function setNormalizer(\Closure $normalizer = null) : SerializerInterface
-    {
-        static::$normalizer = $normalizer;
-
-        return $this;
-    }
-
-    /**
-     * @return SerializerTypeInterface
-     */
-    final public function getSerializer() : SerializerTypeInterface
-    {
-        return static::$serializer;
-    }
-
-    /**
-     * @return bool
-     */
-    final public function hasDefaultSerializer() : bool
-    {
-        return static::$serializer instanceof SerializerTypePhp && static::$serializer->supported();
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    final private static function createSerializer(string $type) : bool
-    {
-        if (call_user_func([$type, 'supported'])) {
-            static::initializeSerializer($type);
-
-            return true;
+        try {
+            $reflection = new \ReflectionClass($className);
+        } catch (\ReflectionException $exception) {
+            throw new \RuntimeException(sprintf(
+                'Provided handler "%s" could not have a \ReflectionClass created.', $className
+            ));
         }
 
-        return false;
+        if (!$reflection->implementsInterface(HandlerInterface::class)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Provided handler "%s" does not implement "%s".', $reflection->getName(), HandlerInterface::class
+            ));
+        }
+
+        if (!$reflection->getMethod('isSupported')->invoke(null)) {
+            throw new \RuntimeException(sprintf(
+                'Provided handler "%s" reported being unsupported in current environment.', $reflection->getName()
+            ));
+        }
+
+        return $reflection->newInstanceArgs($constructorArguments);
     }
 
     /**
-     * @param string $type
+     * @param array $visitors
+     * @param array $blacklist
      *
-     * @return SerializerTypeInterface
+     * @return array
      */
-    final private static function initializeSerializer(string $type) : SerializerTypeInterface
+    private static function filterVisitors(array $visitors, array $blacklist): array
     {
-        return static::$serializer = $serializer = call_user_func([$type, 'create']);
+        return array_filter($visitors, function (VisitorInterface $v) use ($blacklist) {
+            return false === in_array($v, $blacklist, true);
+        });
     }
 }

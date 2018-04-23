@@ -9,21 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace SR\Serializer\Type;
+namespace SR\Serializer\Handler;
 
-class SerializerTypePhp extends AbstractSerializerType
+final class PhpHandler extends ClosureHandler
 {
     public function __construct()
     {
-        $this->serializerHandler = 'serialize';
-        $this->unserializerHandler = 'unserialize';
-    }
-
-    /**
-     * @return bool
-     */
-    public static function supported() : bool
-    {
-        return true;
+        parent::__construct(
+            function ($data) { return serialize($data); },
+            function ($data) { return unserialize($data); }
+        );
     }
 }

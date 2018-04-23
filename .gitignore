@@ -61,7 +61,7 @@
 LICENSE
 README
 
-# phpcsfixer cache
+# PHP-CS-Fixer
 .php_cs.cache
 
 # EOF

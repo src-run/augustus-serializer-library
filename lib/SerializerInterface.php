@@ -11,75 +11,75 @@
 
 namespace SR\Serializer;
 
-use SR\Serializer\Type\SerializerTypeIgbinary;
-use SR\Serializer\Type\SerializerTypeInterface;
-use SR\Serializer\Type\SerializerTypeJson;
-use SR\Serializer\Type\SerializerTypePhp;
+use SR\Serializer\Handler\HandlerInterface;
+use SR\Serializer\Visitor\VisitorInterface;
 
 interface SerializerInterface
 {
     /**
-     * @var string
-     */
-    const TYPE_PHP = SerializerTypePhp::class;
-
-    /**
-     * @var string
-     */
-    const TYPE_IGBINARY = SerializerTypeIgbinary::class;
-
-    /**
-     * @var string
-     */
-    const TYPE_JSON = SerializerTypeJson::class;
-
-    /**
-     * @var string[]
-     */
-    const TYPE_PRIORITY = [
-        self::TYPE_IGBINARY,
-        self::TYPE_PHP,
-        self::TYPE_JSON,
-    ];
-
-    /**
-     * @param string|int $type
+     * @param string|null $handlerName
+     * @param mixed       ...$handlerArguments
      *
-     * @return SerializerInterface
+     * @return self
      */
-    public static function create(string $type = null) : SerializerInterface;
+    public static function create(string $handlerName = null, ...$handlerArguments): self;
 
     /**
-     * @param mixed $data
+     * @return HandlerInterface
+     */
+    public function getHandler(): HandlerInterface;
+
+    /**
+     * @return VisitorInterface[]
+     */
+    public function getSerializeVisitors(): array;
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return self
+     */
+    public function registerSerializeVisitors(VisitorInterface ...$visitors): self;
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return self
+     */
+    public function removeSerializeVisitors(VisitorInterface ...$visitors): self;
+
+    /**
+     * @return VisitorInterface[]
+     */
+    public function getUnSerializeVisitors(): array;
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return self
+     */
+    public function registerUnSerializeVisitors(VisitorInterface ...$visitors): self;
+
+    /**
+     * @param VisitorInterface ...$visitors
+     *
+     * @return self
+     */
+    public function removeUnSerializeVisitors(VisitorInterface ...$visitors): self;
+
+    /**
+     * @param mixed            $data
+     * @param VisitorInterface ...$runtimeVisitors
+     *
+     * @return string
+     */
+    public function serialize($data, VisitorInterface ...$runtimeVisitors): string;
+
+    /**
+     * @param string           $data
+     * @param VisitorInterface ...$runtimeVisitors
      *
      * @return mixed
      */
-    public function serialize($data) : string;
-
-    /**
-     * @param mixed $data
-     *
-     * @return mixed
-     */
-    public function unserialize($data);
-
-    /**
-     * @param null|\Closure $denormalizer
-     */
-    public function setDenormalizer(\Closure $denormalizer = null) : SerializerInterface;
-
-    /**
-     * @param null|\Closure $normalizer
-     */
-    public function setNormalizer(\Closure $normalizer = null) : SerializerInterface;
-
-    /**
-     * @return SerializerTypeInterface
-     */
-    public function getSerializer() : SerializerTypeInterface;
-
-    /**
-     * @return bool
-     */
-    public function hasDefaultSerializer() : bool;
+    public function unSerialize(string $data, VisitorInterface ...$runtimeVisitors);
 }
