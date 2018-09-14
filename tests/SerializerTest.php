@@ -20,7 +20,7 @@ use SR\Serializer\SerializerInterface;
 use SR\Serializer\Tests\Fixture\FooClass;
 use SR\Serializer\Tests\Fixture\FooHandler;
 use SR\Serializer\Visitor\VisitorInterface;
-use SR\Utilities\EngineQuery;
+use SR\Utilities\Query\EngineQuery;
 
 /**
  * @covers \SR\Serializer\Serializer

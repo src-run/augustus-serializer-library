@@ -11,7 +11,7 @@
 
 namespace SR\Serializer\Handler;
 
-use SR\Utilities\EngineQuery;
+use SR\Utilities\Query\EngineQuery;
 
 final class IgbinaryHandler extends ClosureHandler
 {
