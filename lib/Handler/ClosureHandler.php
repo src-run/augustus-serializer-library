@@ -25,29 +25,19 @@ class ClosureHandler implements HandlerInterface
      */
     protected $unSerializationClosure;
 
-    /**
-     * @param \Closure $doSerializationClosure
-     * @param \Closure $unSerializationHandler
-     */
     public function __construct(\Closure $doSerializationClosure, \Closure $unSerializationHandler)
     {
         $this->doSerializationClosure = $doSerializationClosure;
         $this->unSerializationClosure = $unSerializationHandler;
     }
 
-    /**
-     * @return bool
-     */
     public static function isSupported(): bool
     {
         return true;
     }
 
     /**
-     * @param mixed|null       $data
-     * @param VisitorInterface ...$visitors
-     *
-     * @return string
+     * @param mixed|null $data
      */
     public function doSerialization($data = null, VisitorInterface ...$visitors): string
     {
@@ -55,9 +45,6 @@ class ClosureHandler implements HandlerInterface
     }
 
     /**
-     * @param string|null      $data
-     * @param VisitorInterface ...$visitors
-     *
      * @return mixed
      */
     public function unSerialization(string $data = null, VisitorInterface ...$visitors)

@@ -37,9 +37,6 @@ class SerializerTest extends TestCase
         $this->assertInstanceOf(SerializerInterface::class, Serializer::create());
     }
 
-    /**
-     * @return \Iterator
-     */
     public static function provideHandlerData(): \Iterator
     {
         yield [IgbinaryHandler::class];
@@ -49,8 +46,6 @@ class SerializerTest extends TestCase
 
     /**
      * @dataProvider provideHandlerData
-     *
-     * @param string $handler
      */
     public function testSpecifiedHandler(string $handler)
     {
@@ -65,9 +60,6 @@ class SerializerTest extends TestCase
         );
     }
 
-    /**
-     * @return \Iterator
-     */
     public static function provideDefaultSerializationData(): \Iterator
     {
         foreach (self::provideSerializationData() as [$data]) {
@@ -80,8 +72,7 @@ class SerializerTest extends TestCase
     /**
      * @dataProvider provideDefaultSerializationData
      *
-     * @param mixed  $provided
-     * @param string $expected
+     * @param mixed $provided
      */
     public function testSerialization($provided, string $expected): void
     {
@@ -92,9 +83,6 @@ class SerializerTest extends TestCase
         );
     }
 
-    /**
-     * @return \Iterator
-     */
     public static function provideSpecifiedHandlerSerializationData(): \Iterator
     {
         foreach (self::provideHandlerData() as [$handler]) {
@@ -122,9 +110,7 @@ class SerializerTest extends TestCase
     /**
      * @dataProvider provideSpecifiedHandlerSerializationData
      *
-     * @param string $handler
-     * @param mixed  $provided
-     * @param string $expected
+     * @param mixed $provided
      */
     public function testSpecifiedHandlerSerialization(string $handler, $provided, string $expected): void
     {
@@ -184,20 +170,15 @@ class SerializerTest extends TestCase
 
     /**
      * @dataProvider provideInvalidHandlerData
-     *
-     * @param string $handler
      */
     public function testInvalidConstruction(string $handler)
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('{Failed to setup handlers: (".+"){1,}}');
+        $this->expectExceptionMessageMatches('{Failed to setup handlers: (".+"){1,}}');
 
         new Serializer($handler);
     }
 
-    /**
-     * @return \Iterator
-     */
     private static function provideSerializationData(): \Iterator
     {
         $dataSet = [
@@ -216,9 +197,6 @@ class SerializerTest extends TestCase
         }
     }
 
-    /**
-     * @return VisitorInterface
-     */
     private static function getDoSerializationObjectVisitor(): VisitorInterface
     {
         static $visitor;
@@ -258,9 +236,6 @@ class SerializerTest extends TestCase
         return $visitor;
     }
 
-    /**
-     * @return VisitorInterface
-     */
     private static function getUnSerializationObjectVisitor(): VisitorInterface
     {
         static $visitor;

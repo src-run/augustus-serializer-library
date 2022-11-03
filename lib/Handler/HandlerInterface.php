@@ -16,23 +16,14 @@ use SR\Serializer\Visitor\VisitorInterface;
 interface HandlerInterface
 {
     /**
-     * @param mixed|null       $data
-     * @param VisitorInterface ...$visitors
-     *
-     * @return string
+     * @param mixed|null $data
      */
     public function doSerialization($data = null, VisitorInterface ...$visitors): string;
 
     /**
-     * @param string|null      $data
-     * @param VisitorInterface ...$visitors
-     *
      * @return mixed
      */
     public function unSerialization(string $data = null, VisitorInterface ...$visitors);
 
-    /**
-     * @return bool
-     */
     public static function isSupported(): bool;
 }

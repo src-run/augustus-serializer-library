@@ -23,9 +23,6 @@ class FooHandler extends ClosureHandler
         );
     }
 
-    /**
-     * @return bool
-     */
     public static function isSupported(): bool
     {
         return false;

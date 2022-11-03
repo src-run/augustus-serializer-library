@@ -14,5 +14,6 @@ namespace SR\Serializer\Tests\Fixture;
 class FooClass
 {
     public $one = 'one';
+
     public $two = 'two';
 }

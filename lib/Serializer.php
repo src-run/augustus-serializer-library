@@ -29,7 +29,7 @@ final class Serializer implements SerializerInterface
     ];
 
     /**
-     * @var null|HandlerInterface
+     * @var HandlerInterface|null
      */
     private $handler;
 
@@ -44,8 +44,7 @@ final class Serializer implements SerializerInterface
     private $unVisitors = [];
 
     /**
-     * @param string|null $handlerName
-     * @param mixed       ...$handlerArguments
+     * @param mixed ...$handlerArguments
      */
     public function __construct(string $handlerName = null, ...$handlerArguments)
     {
@@ -53,19 +52,13 @@ final class Serializer implements SerializerInterface
     }
 
     /**
-     * @param string|null $handlerName
-     * @param mixed       ...$handlerArguments
-     *
-     * @return SerializerInterface
+     * @param mixed ...$handlerArguments
      */
     public static function create(string $handlerName = null, ...$handlerArguments): SerializerInterface
     {
         return new self($handlerName, ...$handlerArguments);
     }
 
-    /**
-     * @return HandlerInterface
-     */
     public function getHandler(): HandlerInterface
     {
         return $this->handler;
@@ -79,11 +72,6 @@ final class Serializer implements SerializerInterface
         return $this->doVisitors;
     }
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return SerializerInterface
-     */
     public function registerSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
     {
         $this->doVisitors = array_merge($this->doVisitors, self::filterVisitors($visitors, $this->doVisitors));
@@ -91,11 +79,6 @@ final class Serializer implements SerializerInterface
         return $this;
     }
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return SerializerInterface
-     */
     public function removeSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
     {
         $this->doVisitors = self::filterVisitors($this->doVisitors, $visitors ?: $this->doVisitors);
@@ -111,11 +94,6 @@ final class Serializer implements SerializerInterface
         return $this->unVisitors;
     }
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return SerializerInterface
-     */
     public function registerUnSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
     {
         $this->unVisitors = array_merge($this->unVisitors, self::filterVisitors($visitors, $this->unVisitors));
@@ -123,11 +101,6 @@ final class Serializer implements SerializerInterface
         return $this;
     }
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return SerializerInterface
-     */
     public function removeUnSerializeVisitors(VisitorInterface ...$visitors): SerializerInterface
     {
         $this->unVisitors = self::filterVisitors($this->unVisitors, $visitors ?: $this->unVisitors);
@@ -136,10 +109,7 @@ final class Serializer implements SerializerInterface
     }
 
     /**
-     * @param mixed            $data
-     * @param VisitorInterface ...$runtimeVisitors
-     *
-     * @return string
+     * @param mixed $data
      */
     public function serialize($data, VisitorInterface ...$runtimeVisitors): string
     {
@@ -147,9 +117,6 @@ final class Serializer implements SerializerInterface
     }
 
     /**
-     * @param string           $data
-     * @param VisitorInterface ...$runtimeVisitors
-     *
      * @return mixed
      */
     public function unSerialize(string $data, VisitorInterface ...$runtimeVisitors)
@@ -157,12 +124,6 @@ final class Serializer implements SerializerInterface
         return $this->getHandler()->unSerialization($data, ...array_merge($this->unVisitors, $runtimeVisitors));
     }
 
-    /**
-     * @param string|null $name
-     * @param array       $arguments
-     *
-     * @return null|HandlerInterface
-     */
     private function setupHandler(string $name = null, array $arguments = []): ?HandlerInterface
     {
         $exceptions = [];
@@ -175,13 +136,10 @@ final class Serializer implements SerializerInterface
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('Failed to setup handlers: %s', implode(', ', array_map(function (\Exception $exception): string {
-            return sprintf('"%s"', $exception->getMessage());
-        }, $exceptions))), 0, array_shift($exceptions));
+        throw new \InvalidArgumentException(sprintf('Failed to setup handlers: %s', implode(', ', array_map(function (\Exception $exception): string { return sprintf('"%s"', $exception->getMessage()); }, $exceptions))), 0, array_shift($exceptions));
     }
 
     /**
-     * @param string  $className
      * @param mixed[] $constructorArguments
      *
      * @return HandlerInterface|object
@@ -191,32 +149,20 @@ final class Serializer implements SerializerInterface
         try {
             $reflection = new \ReflectionClass($className);
         } catch (\ReflectionException $exception) {
-            throw new \RuntimeException(sprintf(
-                'Provided handler "%s" could not have a \ReflectionClass created.', $className
-            ));
+            throw new \RuntimeException(sprintf('Provided handler "%s" could not have a \ReflectionClass created.', $className));
         }
 
         if (!$reflection->implementsInterface(HandlerInterface::class)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Provided handler "%s" does not implement "%s".', $reflection->getName(), HandlerInterface::class
-            ));
+            throw new \InvalidArgumentException(sprintf('Provided handler "%s" does not implement "%s".', $reflection->getName(), HandlerInterface::class));
         }
 
         if (!$reflection->getMethod('isSupported')->invoke(null)) {
-            throw new \RuntimeException(sprintf(
-                'Provided handler "%s" reported being unsupported in current environment.', $reflection->getName()
-            ));
+            throw new \RuntimeException(sprintf('Provided handler "%s" reported being unsupported in current environment.', $reflection->getName()));
         }
 
         return $reflection->newInstanceArgs($constructorArguments);
     }
 
-    /**
-     * @param array $visitors
-     * @param array $blacklist
-     *
-     * @return array
-     */
     private static function filterVisitors(array $visitors, array $blacklist): array
     {
         return array_filter($visitors, function (VisitorInterface $v) use ($blacklist) {

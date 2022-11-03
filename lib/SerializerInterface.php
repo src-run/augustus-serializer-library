@@ -17,16 +17,10 @@ use SR\Serializer\Visitor\VisitorInterface;
 interface SerializerInterface
 {
     /**
-     * @param string|null $handlerName
-     * @param mixed       ...$handlerArguments
-     *
-     * @return self
+     * @param mixed ...$handlerArguments
      */
     public static function create(string $handlerName = null, ...$handlerArguments): self;
 
-    /**
-     * @return HandlerInterface
-     */
     public function getHandler(): HandlerInterface;
 
     /**
@@ -34,18 +28,8 @@ interface SerializerInterface
      */
     public function getSerializeVisitors(): array;
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return self
-     */
     public function registerSerializeVisitors(VisitorInterface ...$visitors): self;
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return self
-     */
     public function removeSerializeVisitors(VisitorInterface ...$visitors): self;
 
     /**
@@ -53,32 +37,16 @@ interface SerializerInterface
      */
     public function getUnSerializeVisitors(): array;
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return self
-     */
     public function registerUnSerializeVisitors(VisitorInterface ...$visitors): self;
 
-    /**
-     * @param VisitorInterface ...$visitors
-     *
-     * @return self
-     */
     public function removeUnSerializeVisitors(VisitorInterface ...$visitors): self;
 
     /**
-     * @param mixed            $data
-     * @param VisitorInterface ...$runtimeVisitors
-     *
-     * @return string
+     * @param mixed $data
      */
     public function serialize($data, VisitorInterface ...$runtimeVisitors): string;
 
     /**
-     * @param string           $data
-     * @param VisitorInterface ...$runtimeVisitors
-     *
      * @return mixed
      */
     public function unSerialize(string $data, VisitorInterface ...$runtimeVisitors);
